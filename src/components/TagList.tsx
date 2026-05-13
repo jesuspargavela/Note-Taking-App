@@ -1,4 +1,5 @@
 import { useNotes } from "../hooks/useNotes";
+import { useTheme } from "../hooks/useTheme";
 
 import { TAGS } from "../services/api";
 
@@ -13,6 +14,8 @@ function TagList() {
     selectedTag,
     setSelectedTag,
   } = useNotes();
+
+  const { theme } = useTheme();
 
   const searchByTagName = (tag: string) => {
     setSearchedByTagNotes([]);
@@ -49,7 +52,13 @@ function TagList() {
               viewBox="0 0 24 24"
             >
               <path
-                stroke={selectedTag === tag ? "blue" : "white"}
+                stroke={
+                  selectedTag === tag
+                    ? "blue"
+                    : theme === "light"
+                      ? "black"
+                      : "light"
+                }
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="1.8"
@@ -57,7 +66,13 @@ function TagList() {
                 clip-rule="evenodd"
               />
               <path
-                stroke={selectedTag === tag ? "blue" : "white"}
+                stroke={
+                  selectedTag === tag
+                    ? "blue"
+                    : theme === "light"
+                      ? "black"
+                      : "light"
+                }
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="1.8"
@@ -66,7 +81,7 @@ function TagList() {
               />
             </svg>
             <span
-              className={`${selectedTag === tag ? "text-blue-800" : "white"}`}
+              className={`${selectedTag === tag ? "text-blue-800" : theme === "light" ? "black" : "light"}`}
             >
               {tag}
             </span>

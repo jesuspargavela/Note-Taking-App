@@ -1,4 +1,5 @@
 import { useNotes } from "./hooks/useNotes";
+import { useTheme } from "./hooks/useTheme";
 
 import Header from "./components/Header";
 import Aside from "./components/Aside";
@@ -10,9 +11,10 @@ import "./App.css";
 
 function App() {
   const { isSelected } = useNotes();
+  const { theme } = useTheme();
 
   return (
-    <div className="bg-black text-white">
+    <div className={`${theme === "black" ? " bg-black text-white" : "bg-white text-black"}`}>
       <Header />
       <Aside />
       {isSelected ? (
