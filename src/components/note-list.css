@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.notes {
+  scrollbar-width: none;
+}
