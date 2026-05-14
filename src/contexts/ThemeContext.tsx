@@ -35,4 +35,6 @@ function ThemeProvider({ children }: ThemeProviderType) {
   );
 }
 
-export { ThemeContext, ThemeProvider };
+export { ThemeContext, ThemeProvider };  
+export type { Theme };
+
