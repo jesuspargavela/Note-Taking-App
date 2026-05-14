@@ -16,6 +16,7 @@ function NoteFooter({ note, content }: NoteFooterType) {
     const noteFound = notes.find((n: Note) => n.id === note.id);
     if (!noteFound) return;
     noteFound.content = content;
+    noteFound.lastEdited = new Date().toISOString();
     setIsSelected(null);
   };
 

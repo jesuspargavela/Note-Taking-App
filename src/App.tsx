@@ -39,8 +39,6 @@ function App() {
       isArchived: false,
     };
 
-    console.log(newNote.lastEdited);
-
     const addedNewNoteArray = [...notes, newNote];
 
     setNotes(addedNewNoteArray);
@@ -72,7 +70,7 @@ function App() {
           </article>
         </main>
       )}
-      <CreateNote dialogRef={dialogRef}>
+      <CreateNote dialogRef={dialogRef} theme={theme}>
         <form ref={formRef} onSubmit={handleSubmit}>
           <div className="flex flex-col gap-3">
             <h1 className="text-3xl">Create Note</h1>
@@ -115,7 +113,10 @@ function App() {
                 required
               ></textarea>
             </div>
-            <button className="rounded-sm border bg-green-400" type="submit">
+            <button
+              className="cursor-pointer rounded-sm border bg-green-400"
+              type="submit"
+            >
               Create Note
             </button>
           </div>
