@@ -15,7 +15,7 @@ function TagList() {
     setSelectedTag,
   } = useNotes();
 
-  const { theme } = useTheme();
+  const { theme, themeColorsSwitcher } = useTheme();
 
   const searchByTagName = (tag: string) => {
     setSearchedByTagNotes([]);
@@ -38,6 +38,7 @@ function TagList() {
       {TAGS.map((tag: string) => {
         return (
           <li
+            key={tag}
             className={"flex cursor-pointer gap-1 pb-2"}
             onClick={() => {
               setSelectedTag(tag);
@@ -53,11 +54,7 @@ function TagList() {
             >
               <path
                 stroke={
-                  selectedTag === tag
-                    ? "blue"
-                    : theme === "light"
-                      ? "black"
-                      : "light"
+                  selectedTag === tag ? "blue" : themeColorsSwitcher[theme]
                 }
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -67,11 +64,7 @@ function TagList() {
               />
               <path
                 stroke={
-                  selectedTag === tag
-                    ? "blue"
-                    : theme === "light"
-                      ? "black"
-                      : "light"
+                  selectedTag === tag ? "blue" : themeColorsSwitcher[theme]
                 }
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -81,7 +74,9 @@ function TagList() {
               />
             </svg>
             <span
-              className={`${selectedTag === tag ? "text-blue-800" : theme === "light" ? "black" : "light"}`}
+              className={`${
+                selectedTag === tag ? "blue" : themeColorsSwitcher[theme]
+              }`}
             >
               {tag}
             </span>
