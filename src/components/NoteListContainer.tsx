@@ -4,7 +4,11 @@ import NoteList from "./NoteList";
 
 import "./note-list-container.css";
 
-function NoteListContainer() {
+type NoteListContainerType = {
+  dialogRef: React.RefObject<HTMLDialogElement | null>;
+};
+
+function NoteListContainer({ dialogRef }: NoteListContainerType) {
   const { noteTypes } = useNotes();
 
   return (
@@ -14,6 +18,11 @@ function NoteListContainer() {
           <button
             type="button"
             className="cursor-pointer rounded-md border bg-blue-600 px-2 py-1"
+            onClick={() => {
+              if (!dialogRef.current?.open) {
+                dialogRef.current?.showModal();
+              }
+            }}
           >
             + Create New Note
           </button>
