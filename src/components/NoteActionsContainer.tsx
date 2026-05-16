@@ -3,6 +3,8 @@ import { useTheme } from "../hooks/useTheme";
 
 import type { Note } from "../models/Note";
 
+import { deleteNote } from "../services/api";
+
 import "./note-actions-container.css";
 
 type NoteActionsContainerType = {
@@ -65,14 +67,20 @@ function NoteActionsContainer({ note }: NoteActionsContainerType) {
         <div
           className="flex cursor-pointer gap-2 rounded-sm border p-2"
           onClick={() => {
-            if (noteTypes === "All") {
-              setNotes(notes.filter((n: Note) => n.id !== note.id));
-            } else {
-              setArchivedNotes(
-                archivedNotes.filter((n: Note) => n.id !== note.id),
-              );
-            }
-            setIsSelected(null);
+            deleteNote(note.id!)
+              .then(() => {
+                if (noteTypes === "All") {
+                  setNotes(notes.filter((n: Note) => n.id !== note.id));
+                } else {
+                  setArchivedNotes(
+                    archivedNotes.filter((n: Note) => n.id !== note.id),
+                  );
+                }
+                setIsSelected(null);
+              })
+              .catch((err) => {
+                if (err instanceof Error) console.error(err.message);
+              });
           }}
         >
           <svg

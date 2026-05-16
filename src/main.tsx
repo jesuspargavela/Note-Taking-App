@@ -4,15 +4,18 @@ import "./index.css";
 
 import { NotesProvider } from "./contexts/NotesContext";
 import { ThemeProvider } from "./contexts/ThemeContext.tsx";
+import { TagsProvider } from "./contexts/TagsContext.tsx";
 
 import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <NotesProvider>
     <ThemeProvider>
-      <StrictMode>
-        <App />
-      </StrictMode>
+      <TagsProvider>
+        <StrictMode>
+          <App />
+        </StrictMode>
+      </TagsProvider>
     </ThemeProvider>
   </NotesProvider>,
 );

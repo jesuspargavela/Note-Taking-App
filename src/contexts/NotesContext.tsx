@@ -1,6 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
-import { NOTES } from "../services/api";
+import { getNotes } from "../services/api";
 
 import type { Note } from "../models/Note";
 
@@ -17,8 +17,6 @@ type NotesContextType = {
   setIsSelected: React.Dispatch<React.SetStateAction<Note | null>>;
   noteTypes: string;
   setNoteTypes: React.Dispatch<React.SetStateAction<string>>;
-  selectedTag: string;
-  setSelectedTag: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const NotesContext = createContext<NotesContextType | null>(null);
@@ -28,17 +26,28 @@ type NotesProviderType = {
 };
 
 function NotesProvider({ children }: NotesProviderType) {
-  const [notes, setNotes] = useState<Note[]>(NOTES);
-  const [archivedNotes, setArchivedNotes] = useState<Note[]>(
-    NOTES.filter((n: Note) => n.isArchived),
-  );
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [archivedNotes, setArchivedNotes] = useState<Note[]>([]);
   const [searchedByTagNotes, setSearchedByTagNotes] = useState<Note[]>([]);
   const [searchedBySearchBarNotes, setSearchedBySearchBarNotes] = useState<
     Note[]
   >([]);
   const [isSelected, setIsSelected] = useState<Note | null>(null);
   const [noteTypes, setNoteTypes] = useState<string>("All");
-  const [selectedTag, setSelectedTag] = useState<string>("");
+
+  useEffect(() => {
+    const fetchNotesData = async () => {
+      try {
+        const data = await getNotes();
+        setNotes(data);
+        setArchivedNotes(data.filter((n: Note) => n.isArchived));
+      } catch (error) {
+        if (error instanceof Error) console.error(error.message);
+      }
+    };
+
+    fetchNotesData();
+  }, []);
 
   return (
     <NotesContext.Provider
@@ -55,8 +64,6 @@ function NotesProvider({ children }: NotesProviderType) {
         setSearchedBySearchBarNotes,
         noteTypes,
         setNoteTypes,
-        selectedTag,
-        setSelectedTag,
       }}
     >
       {children}

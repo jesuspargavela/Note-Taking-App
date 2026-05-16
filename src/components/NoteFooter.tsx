@@ -2,6 +2,8 @@ import { useNotes } from "../hooks/useNotes";
 
 import type { Note } from "../models/Note";
 
+import { updateNote } from "../services/api";
+
 import "./note-footer.css";
 
 type NoteFooterType = {
@@ -15,9 +17,22 @@ function NoteFooter({ note, content }: NoteFooterType) {
   const saveNote = () => {
     const noteFound = notes.find((n: Note) => n.id === note.id);
     if (!noteFound) return;
+
+    const oldContent = noteFound.content;
+    const oldLastEdited = noteFound.lastEdited;
+
     noteFound.content = content;
     noteFound.lastEdited = new Date().toISOString();
-    setIsSelected(null);
+
+    updateNote(note.id!, noteFound)
+      .then(() => {
+        setIsSelected(null);
+      })
+      .catch((err) => {
+        noteFound.content = oldContent;
+        noteFound.lastEdited = oldLastEdited;
+        if (err instanceof Error) console.error(err.message);
+      });
   };
 
   return (

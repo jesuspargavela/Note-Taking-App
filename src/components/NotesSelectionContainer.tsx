@@ -1,11 +1,13 @@
 import { useNotes } from "../hooks/useNotes";
+import { useTags } from "../hooks/useTags";
 import { useTheme } from "../hooks/useTheme";
 
 import "./notes-selection-container.css";
 
 function NotesSelectionContainer() {
-  const { noteTypes, setNoteTypes, setSelectedTag } = useNotes();
+  const { noteTypes, setNoteTypes } = useNotes();
   const { theme, themeColorsSwitcher } = useTheme();
+  const { setSelectedTag } = useTags();
 
   return (
     <div className="flex flex-col justify-start border-b p-2">

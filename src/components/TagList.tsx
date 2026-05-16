@@ -1,20 +1,13 @@
 import { useNotes } from "../hooks/useNotes";
+import { useTags } from "../hooks/useTags";
 import { useTheme } from "../hooks/useTheme";
-
-import { TAGS } from "../services/api";
 
 import "./tag-list.css";
 
 function TagList() {
-  const {
-    notes,
-    archivedNotes,
-    setSearchedByTagNotes,
-    setNoteTypes,
-    selectedTag,
-    setSelectedTag,
-  } = useNotes();
-
+  const { notes, archivedNotes, setSearchedByTagNotes, setNoteTypes } =
+    useNotes();
+  const { tags, selectedTag, setSelectedTag } = useTags();
   const { theme, themeColorsSwitcher } = useTheme();
 
   const searchByTagName = (tag: string) => {
@@ -35,7 +28,7 @@ function TagList() {
 
   return (
     <ul className="flex flex-col">
-      {TAGS.map((tag: string) => {
+      {tags.map((tag: string) => {
         return (
           <li
             key={tag}

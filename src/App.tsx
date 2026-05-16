@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 
 import { useNotes } from "./hooks/useNotes";
 import { useTheme } from "./hooks/useTheme";
+import { useTags } from "./hooks/useTags";
 
 import Header from "./components/Header";
 import Aside from "./components/Aside";
@@ -10,19 +11,20 @@ import NoteContainer from "./components/NoteContainer";
 import NoteActionsContainer from "./components/NoteActionsContainer";
 import CreateNote from "./components/CreateNote";
 
-import { TAGS } from "./services/api";
-
 import type { Note } from "./models/Note";
+
+import { createNote } from "./services/api";
 
 import "./App.css";
 
 function App() {
   const [title, setTitle] = useState<string>("");
-  const [tags, setTags] = useState<string[]>([]);
+  const [dialogTags, setDialogTags] = useState<string[]>([]);
   const [content, setContent] = useState<string>("");
 
-  const { notes, setNotes, isSelected } = useNotes();
+  const { setNotes, isSelected } = useNotes();
   const { theme } = useTheme();
+  const { tags } = useTags();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -30,22 +32,23 @@ function App() {
   const handleSubmit = (event: React.SubmitEvent) => {
     event.preventDefault();
 
-    const newNote: Note = {
-      id: crypto.randomUUID(),
+    const newNote: Omit<Note, "id"> = {
       title,
-      tags,
+      tags: dialogTags,
       content,
       lastEdited: new Date().toISOString(),
       isArchived: false,
     };
 
-    const addedNewNoteArray = [...notes, newNote];
-
-    setNotes(addedNewNoteArray);
-
-    formRef.current?.reset();
-
-    dialogRef.current?.close();
+    createNote(newNote)
+      .then(() => {
+        setNotes((prev) => [...prev, newNote]);
+        formRef.current?.reset();
+        dialogRef.current?.close();
+      })
+      .catch((err) => {
+        if (err instanceof Error) console.error(err.message);
+      });
   };
 
   return (
@@ -85,18 +88,20 @@ function App() {
               />
             </div>
             <div className="flex gap-2">
-              <label htmlFor="tags">Tags</label>
+              <label htmlFor="dialogTags">Tags</label>
               <select
                 className="rounded-sm border"
-                name="tags"
-                id="tags"
+                name="dialogTags"
+                id="dialogTags"
                 onChange={(e) =>
-                  setTags((prev) => [...new Set([...prev, e.target.value])])
+                  setDialogTags((prev) => [
+                    ...new Set([...prev, e.target.value]),
+                  ])
                 }
                 multiple
                 required
               >
-                {TAGS.map((t: string) => (
+                {tags.map((t: string) => (
                   <option value={t}>{t}</option>
                 ))}
               </select>
