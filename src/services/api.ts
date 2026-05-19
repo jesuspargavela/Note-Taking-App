@@ -11,7 +11,7 @@ export const getNotes = async (): Promise<Note[]> => {
         return await response.json() as Note[];
     } catch (error) {
         if (error instanceof Error) console.error(error.message);
-        return []; // fallback
+        return []; 
     }
 };
 
@@ -30,7 +30,7 @@ export const getNote = async (id: string): Promise<Note | null> => {
     }
 };
 
-export const createNote = async (newNote: Omit<Note, "id">): Promise<void | null> => {
+export const createNote = async (newNote: Omit<Note, "id">): Promise<Note | null> => {
     try {
         const response = await fetch("http://localhost:3000/notes", {
             method: "POST",
@@ -42,14 +42,14 @@ export const createNote = async (newNote: Omit<Note, "id">): Promise<void | null
             throw new Error("Failed to create note");
         }
 
-        return;
+        return await response.json() as Note;
     } catch (error) {
         if (error instanceof Error) console.error(error.message);
         return null;
     }
 };
 
-export const updateNote = async (id: string, updatedNote: Note): Promise<void | null> => {
+export const updateNote = async (id: string, updatedNote: Note): Promise<Note | null> => {
     try {
         const response = await fetch(`http://localhost:3000/notes/${id}`, {
             method: "PUT",
@@ -61,7 +61,7 @@ export const updateNote = async (id: string, updatedNote: Note): Promise<void | 
             throw new Error(`Failed to update note with id ${id}`);
         }
 
-        return;
+        return await response.json() as Note;
     } catch (error) {
         if (error instanceof Error) console.error(error.message);
         return null;
